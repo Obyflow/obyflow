@@ -15,8 +15,8 @@ importers:
         specifier: ^13.0.3
         version: 13.0.3
       zod:
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.4
+        version: 4.5.4
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -112,14 +112,14 @@ importers:
         specifier: 13.0.3
         version: 13.0.3
       zod:
-        specifier: ^4.4.3
-        version: 4.4.3
+        specifier: ^4.5.4
+        version: 4.5.4
 
   packages/llm/llm-anthropic:
     dependencies:
       '@anthropic-ai/sdk':
         specifier: ^0.123.0
-        version: 0.123.0(zod@4.4.3)
+        version: 0.123.0(zod@4.5.4)
       '@obyflow/core':
         specifier: workspace:*
         version: link:../../core
@@ -180,7 +180,7 @@ importers:
         version: link:../llm-core
       openai:
         specifier: ^7.7.0
-        version: 7.7.0(ws@8.21.3)(zod@4.4.3)
+        version: 7.7.0(ws@8.21.3)(zod@4.5.4)
     devDependencies:
       '@types/node':
         specifier: ^22.10.0
@@ -1303,17 +1303,17 @@ packages:
     resolution: {integrity: sha512-xYqdZFUK/VYazNl/oCDYN+3WloWQwMfZxBoiNt6qNyk+xfOdi598muWE42rNZFp1kNOiqW936q5RhUdnpqElSg==}
     engines: {node: '>=18'}
 
-  zod@4.4.3:
-    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
+  zod@4.5.4:
+    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
 
 snapshots:
 
-  '@anthropic-ai/sdk@0.123.0(zod@4.4.3)':
+  '@anthropic-ai/sdk@0.123.0(zod@4.5.4)':
     dependencies:
       json-schema-to-ts: 3.1.1
       standardwebhooks: 1.1.1
     optionalDependencies:
-      zod: 4.4.3
+      zod: 4.5.4
 
   '@babel/runtime@7.29.7': {}
 
@@ -2006,10 +2006,10 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  openai@7.7.0(ws@8.21.3)(zod@4.4.3):
+  openai@7.7.0(ws@8.21.3)(zod@4.5.4):
     optionalDependencies:
       ws: 8.21.3
-      zod: 4.4.3
+      zod: 4.5.4
 
   optionator@0.9.4:
     dependencies:
@@ -2250,4 +2250,4 @@ snapshots:
 
   yoctocolors@2.2.0: {}
 
-  zod@4.4.3: {}
+  zod@4.5.4: {}
