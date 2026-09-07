@@ -45,3 +45,11 @@ def test_classify_severity_tiers():
     assert classify_severity(2.5) == "medium"
     assert classify_severity(4.0) == "high"
     assert classify_severity(-4.0) == "high"
+
+
+def test_classify_severity_custom_thresholds():
+    assert classify_severity(1.5, low_threshold=2.0) == "none"
+    assert classify_severity(2.5, low_threshold= 2.0, medium_threshold=3.0) == "low"
+    assert classify_severity(3.5, medium_threshold=3.0, high_threshold=5.0) == "medium"
+    assert classify_severity(5.5, high_threshold=5.0) == "high"
+

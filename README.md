@@ -150,7 +150,7 @@ app.add_middleware(ObyflowASGIMiddleware, service="checkout-api", store=handle.s
 | Median/MAD ("robust") baselining | Yes | No |
 | Rolling time-windowed buckets | Yes | No |
 | Deployment-aware bucketing | Yes | No |
-| Configurable z-score threshold | Yes | No (fixed thresholds in `classify_severity`) |
+| Configurable z-score threshold | Yes | Yes |
 | ML-based detection (IsolationForest) | No | Yes (`detect_ml_anomalies`, `obyflow-python[analysis]`) |
 
 The Python SDK's `analysis/` module is a separate, Python-only convenience toolkit, not a port of `packages/core/src/anomaly/baseline.ts`, which the CLI's `investigate`/`ask`/`incident` commands use internally. `detect_ml_anomalies` (IsolationForest-based) is Python-exclusive, with no TypeScript/core equivalent.

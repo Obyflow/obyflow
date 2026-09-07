@@ -58,3 +58,18 @@ def test_detect_ml_anomalies_result_shape():
         assert isinstance(item["z_score"], float)
         assert item["severity"] in ("none", "low", "medium", "high")
         assert isinstance(item["is_anomalous"], bool)
+
+
+def test_detect_ml_anomalies_with_custom_thresholds():
+    events = [_make_event(f"e{i}", 100.0 + i) for i in range(20)]
+    events.append(_make_event("spike", 50000.0))
+    result = detect_ml_anomalies(
+        events,
+        "checkout",
+        min_samples=5,
+        low_threshold=0.5,
+        medium_threshold=1.0,
+        high_threshold=1.5
+    )
+    spike_result = next(r for r in result if r["event_id"] == "spike")
+    assert spike_result["severity"] == "high"
