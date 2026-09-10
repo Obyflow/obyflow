@@ -56,6 +56,12 @@ def classify_severity(
     medium_threshold: float = 2.0,
     high_threshold: float = 3.0
 ) -> DeviationSeverity:
+    if not low_threshold < medium_threshold < high_threshold:
+        raise ValueError(
+            "Thresholds must be in ascending order: "
+            f"low_threshold ({low_threshold}) < medium_threshold "
+            f"({medium_threshold}) < high_threshold ({high_threshold})"
+        )
     abs_z = abs(z_score)
     if abs_z < low_threshold:
         return "none"
