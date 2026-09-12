@@ -49,6 +49,16 @@
       "name": "null and undefined-like values pass through",
       "attributes": { "password": null, "note": "fine" },
       "expected": { "password": null, "note": "fine" }
+    },
+    {
+      "name": "short keys are not falsely redacted as sensitive fields",
+      "attributes": { "to": "normal", "key": "cache-key-123", "at": "normal" },
+      "expected": { "to": "normal", "key": "cache-key-123", "at": "normal" }
+    },
+    {
+      "name": "four-character sensitive substring is still redacted",
+      "attributes": { "auth": "secret" },
+      "expected": { "auth": "[REDACTED]" }
     }
   ]
 }

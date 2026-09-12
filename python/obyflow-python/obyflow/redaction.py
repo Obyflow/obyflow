@@ -32,6 +32,13 @@ def _normalize_key(key: str) -> str:
     return _NON_ALNUM.sub("", key.lower())
 
 
+# Minimum normalized-key length required to match via the reverse
+# (field-contains-key) direction. Without this floor, very short keys
+# like "t" or "s" spuriously match long field names like "token" or
+# "ssn" purely because they're single-character substrings.
+_MIN_REVERSE_MATCH_LENGTH = 4
+
+
 def _key_matches_field(key: str, fields: List[str]) -> bool:
     normalized_key = _normalize_key(key)
     if not normalized_key:
@@ -40,7 +47,11 @@ def _key_matches_field(key: str, fields: List[str]) -> bool:
         normalized_field = _normalize_key(candidate)
         if not normalized_field:
             continue
-        if normalized_field in normalized_key or normalized_key in normalized_field:
+        if normalized_field in normalized_key:
+            return True
+        if len(normalized_key) < _MIN_REVERSE_MATCH_LENGTH:
+            continue
+        if normalized_key in normalized_field:
             return True
     return False
 
