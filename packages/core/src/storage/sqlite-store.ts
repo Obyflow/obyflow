@@ -487,6 +487,13 @@ export class SqliteStore {
     return row.c;
   }
 
+  countOlderThan(beforeIso: string): number {
+    const row = this.db
+      .prepare(`SELECT COUNT(*) as c FROM events WHERE timestamp < ?`)
+      .get(beforeIso) as { c: number };
+    return row.c;
+  }
+
   oldestTimestamp(): string | null {
     const row = this.db.prepare(`SELECT MIN(timestamp) as t FROM events`).get() as {
       t: string | null;

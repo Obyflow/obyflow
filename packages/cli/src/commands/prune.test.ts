@@ -108,4 +108,28 @@ describe("obyflow prune", () => {
     expect(store.countAll()).toBe(1);
     store.close();
   });
+
+  it("shows what would be deleted without deleting, even with --yes", async () => {
+    dir = mkdtempSync(join(tmpdir(), "obyflow-cli-prune-"));
+    const dbPath = join(dir, "test.db");
+    const old = new Date(Date.now() - 40 * 86_400_000).toISOString();
+    const recent = new Date().toISOString();
+    seedEvents(dbPath, [old, recent]);
+
+    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
+    const program = buildProgram();
+
+    await program.parseAsync(
+      ["prune", "--db", dbPath, "--older-than", "30d", "--dry-run", "--yes"],
+      { from: "user" },
+    );
+
+    const output = logSpy.mock.calls.map((call) => call.join(" ")).join("\n");
+    expect(output).toContain("1 event(s) would be deleted.");
+    logSpy.mockRestore();
+
+    const store = new SqliteStore(dbPath);
+    expect(store.countAll()).toBe(2);
+    store.close();
+  });
 });

@@ -7,6 +7,7 @@ interface PruneCommandOptions {
   db: string;
   olderThan: string;
   yes?: boolean;
+  dryRun?: boolean;
 }
 
 export function registerPruneCommand(program: Command): void {
@@ -16,6 +17,7 @@ export function registerPruneCommand(program: Command): void {
     .option("--db <path>", "path to the obyflow SQLite database", "obyflow.db")
     .option("--older-than <window>", "age threshold, e.g. 30d, 12h, 45m", "30d")
     .option("--yes", "skip the confirmation prompt and delete immediately")
+    .option("--dry-run", "show what would be deleted without deleting")
     .action((options: PruneCommandOptions) => {
       const beforeIso = parseSince(options.olderThan);
       if (!beforeIso) {
@@ -29,13 +31,20 @@ export function registerPruneCommand(program: Command): void {
 
       const store = new SqliteStore(options.db);
       try {
-        const totalBefore = store.countAll();
+        const totalToDelete = store.countOlderThan(beforeIso);
+
+        if (options.dryRun) {
+          console.log(
+            chalk.green(`${totalToDelete} event(s) would be deleted.`),
+          );
+          return;
+        }
 
         if (!options.yes) {
           console.log(
             chalk.yellow(
               `This will permanently delete events older than ${beforeIso} from ${options.db} ` +
-                `(${totalBefore} total event(s) currently stored).`,
+                `(${totalToDelete} event(s) would be deleted).`,
             ),
           );
           console.log(chalk.dim("Re-run with --yes to confirm."));
