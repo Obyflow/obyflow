@@ -39,6 +39,31 @@ describe("SqliteStore", () => {
     expect(rows[0].id).toBe("evt_1");
   });
 
+  it("counts events older than a given timestamp", () => {
+    store.insert(
+      makeEvent({
+        id: "old_1",
+        timestamp: "2026-01-01T00:00:00.000Z",
+      }),
+    );
+
+    store.insert(
+      makeEvent({
+        id: "old_2",
+        timestamp: "2026-02-01T00:00:00.000Z",
+      }),
+    );
+
+    store.insert(
+      makeEvent({
+        id: "new_1",
+        timestamp: "2026-03-01T00:00:00.000Z",
+      }),
+    );
+
+    expect(store.countOlderThan("2026-03-01T00:00:00.000Z")).toBe(2);
+  });
+
   it("round-trips attributes as JSON via rowToEvent", () => {
     store.insert(
       makeEvent({ id: "evt_json", attributes: { nested: { a: 1, b: [1, 2, 3] } } }),
