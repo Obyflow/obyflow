@@ -28,12 +28,12 @@
     "husky": "^9.1.7",
     "turbo": "^2.10.12",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.68.0",
+    "typescript-eslint": "^8.69.0",
     "vitest": "^4.1.11"
   },
   "dependencies": {
     "better-sqlite3": "^13.0.3",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "pnpm": {
     "overrides": {
