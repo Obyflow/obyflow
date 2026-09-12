@@ -23,7 +23,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/better-sqlite3": "^9.6.0",
-    "@types/node": "^22.10.0",
+    "@types/node": "^22.20.2",
     "eslint": "^10.9.1",
     "husky": "^9.1.7",
     "turbo": "^2.10.12",
@@ -37,7 +37,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "^22.10.0"
+      "@types/node": "^22.20.2"
     },
     "ignoredBuiltDependencies": [
       "protobufjs"
