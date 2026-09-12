@@ -145,6 +145,26 @@ describe("node-sdk inbound http instrumentation", () => {
     );
   });
 
+  it("marks 4xx responses as severity warn", async () => {
+    const store = new SqliteStore(":memory:");
+    instrumentHttp({ service: "svc-client-error", store });
+
+    await withServer(
+      (_req, res) => {
+        res.writeHead(404);
+        res.end("not found");
+      },
+      async (port) => {
+        await request(port, "/missing");
+        await new Promise((resolve) => setTimeout(resolve, 20));
+
+        const rows = store.getByService("svc-client-error");
+        expect(rows).toHaveLength(1);
+        expect(rows[0].severity).toBe("warn");
+      },
+    );
+  });
+
   it("captures a distinct trace event per request across multiple concurrent requests", async () => {
     const store = new SqliteStore(":memory:");
     instrumentHttp({ service: "svc-concurrent", store });

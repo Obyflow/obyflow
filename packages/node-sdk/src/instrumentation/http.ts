@@ -65,7 +65,7 @@ export function instrumentHttp(options: HttpInstrumentationOptions): void {
           status_code: res.statusCode,
         },
         resource_attributes: resolveResourceAttributes(currentOptions.resourceAttributes),
-        severity: res.statusCode >= 500 ? "error" : "info",
+        severity: res.statusCode >= 500 ? "error" : res.statusCode >= 400 ? "warn" : "info",
       };
 
       try {
