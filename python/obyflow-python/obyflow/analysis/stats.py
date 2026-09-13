@@ -50,18 +50,25 @@ def z_score_of(value: float, baseline: BaselineStats) -> float:
     return (value - baseline["mean"]) / baseline["stddev"]
 
 
-def classify_severity(
-    z_score: float,
-    low_threshold: float = 1.0,
-    medium_threshold: float = 2.0,
-    high_threshold: float = 3.0
-) -> DeviationSeverity:
+def _validate_thresholds(
+    low_threshold: float, medium_threshold: float, high_threshold: float
+) -> None:
+    """Reject unordered severity thresholds before any analysis work."""
     if not low_threshold < medium_threshold < high_threshold:
         raise ValueError(
             "Thresholds must be in ascending order: "
             f"low_threshold ({low_threshold}) < medium_threshold "
             f"({medium_threshold}) < high_threshold ({high_threshold})"
         )
+
+
+def classify_severity(
+    z_score: float,
+    low_threshold: float = 1.0,
+    medium_threshold: float = 2.0,
+    high_threshold: float = 3.0
+) -> DeviationSeverity:
+    _validate_thresholds(low_threshold, medium_threshold, high_threshold)
     abs_z = abs(z_score)
     if abs_z < low_threshold:
         return "none"
