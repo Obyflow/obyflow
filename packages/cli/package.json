@@ -24,7 +24,7 @@
     "figlet": "^1.8.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
+    "@types/node": "^22.20.2",
     "@types/figlet": "^1.7.0"
   },
   "files": [
