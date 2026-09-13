@@ -13,7 +13,7 @@
     "@obyflow/core": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0"
+    "@types/node": "^22.20.2"
   },
   "repository": {
     "type": "git",
