@@ -13,6 +13,7 @@ from ..events import Event
 from .stats import (
     BaselineStats,
     DeviationSeverity,
+    _validate_thresholds,
     classify_severity,
     compute_baseline_stats,
     z_score_of,
@@ -49,6 +50,8 @@ def detect_ml_anomalies(
     medium_threshold: float = 2.0,
     high_threshold: float = 3.0
 ) -> list[MLAnomalyResult]:
+    """Detect anomalies, rejecting invalid thresholds before imports or model work."""
+    _validate_thresholds(low_threshold, medium_threshold, high_threshold)
     try:
         from sklearn.ensemble import IsolationForest
     except ImportError as exc:
