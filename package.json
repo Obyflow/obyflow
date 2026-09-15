@@ -1,6 +1,6 @@
 {
   "name": "obyflow",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": true,
   "description": "Obyflow — AI-native, CLI-first observability platform for tracing, debugging, and understanding modern applications.",
   "main": "index.js",
