@@ -108,7 +108,7 @@ interface OllamaChatResponse {
   eval_count?: number;
 }
 
-function extractFinding(response: OllamaChatResponse): RawFinding {
+function extractFinding(response: OllamaChatResponse): RawFinding | null {
   const toolCall = response.message?.tool_calls?.find(
     (call) => call.function?.name === FINDING_TOOL_NAME,
   );
@@ -120,9 +120,21 @@ function extractFinding(response: OllamaChatResponse): RawFinding {
 
   const content = response.message?.content;
   if (!content) {
-    throw new Error("Ollama response did not include a tool call or content to parse");
+    return null;
   }
-  return JSON.parse(content) as RawFinding;
+  try {
+    return JSON.parse(content) as RawFinding;
+  } catch {
+    const match = content.match(/\{[\s\S]*\}/);
+    if (match) {
+      try {
+        return JSON.parse(match[0]) as RawFinding;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }
 }
 
 export class OllamaLLMAdapter implements LLMAdapter {
@@ -160,40 +172,65 @@ export class OllamaLLMAdapter implements LLMAdapter {
     const systemPrompt = buildSystemPrompt();
     const userPrompt = buildUserPrompt(trimmedEvidence, question);
 
-    const httpResponse = await withRetry(async () => {
-      const res = await fetch(`${this.baseUrl}/api/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: this.model,
-          stream: false,
-          options: { temperature: this.temperature },
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userPrompt },
-          ],
-          tools: [FINDING_TOOL],
-        }),
+    const callOllama = async (body: Record<string, unknown>) => {
+      const res = await withRetry(async () => {
+        const r = await fetch(`${this.baseUrl}/api/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (!r.ok) {
+          const error = new Error(`Ollama request failed with status ${r.status}`) as Error & {
+            status?: number;
+          };
+          error.status = r.status;
+          throw error;
+        }
+        return r;
       });
+      return (await res.json()) as OllamaChatResponse;
+    };
 
-      if (!res.ok) {
-        const error = new Error(`Ollama request failed with status ${res.status}`) as Error & {
-          status?: number;
-        };
-        error.status = res.status;
-        throw error;
-      }
-
-      return res;
+    let payload = await callOllama({
+      model: this.model,
+      stream: false,
+      options: { temperature: this.temperature },
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      tools: [FINDING_TOOL],
     });
 
+    let finding = extractFinding(payload);
+    if (!finding || !isValidFinding(finding)) {
+      const jsonSchemaReminder = [
+        "Your previous response did not call the required tool.",
+        "Respond now with ONLY a single JSON object (no prose, no markdown fences) matching exactly this shape:",
+        '{"root_cause": string, "evidence_refs": string[], "recommendation": string}',
+      ].join(" ");
+
+      payload = await callOllama({
+        model: this.model,
+        stream: false,
+        format: "json",
+        options: { temperature: this.temperature },
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+          { role: "user", content: jsonSchemaReminder },
+        ],
+      });
+
+      finding = extractFinding(payload);
+    }
+
     const latencyMs = Date.now() - startedAt;
-    const payload = (await httpResponse.json()) as OllamaChatResponse;
 
-    const finding = extractFinding(payload);
-
-    if (!isValidFinding(finding)) {
-      throw new Error("Ollama response did not match the expected investigation finding shape");
+    if (!finding || !isValidFinding(finding)) {
+      throw new Error(
+        "Ollama response did not match the expected investigation finding shape, even after a forced-JSON retry. Try a model with more reliable instruction-following.",
+      );
     }
 
     const evidenceRefs = finding.evidence_refs.filter(
