@@ -3,7 +3,7 @@ import chalk from "chalk";
 import { SqliteStore, rowToEvent } from "@obyflow/core";
 import { estimateCostUsd } from "@obyflow/llm-core";
 import { renderTable, type TableColumn } from "../render/table.js";
-import { parseSince } from "../render/time.js";
+import { parseSince, parseTimeWindowOption } from "../render/time.js";
 
 interface UsageCommandOptions {
   db: string;
@@ -47,7 +47,7 @@ export function registerUsageCommand(program: Command): void {
     .description("Summarize LLM token consumption and estimated cost from llm_call events, grouped by service")
     .option("--db <path>", "path to the obyflow SQLite database", "obyflow.db")
     .option("--service <name>", "filter by service name")
-    .option("--since <window>", "time window, e.g. 15m, 2h, 1d")
+    .option("--since <window>", "time window, e.g. 15m, 2h, 1d", parseTimeWindowOption)
     .option("--limit <n>", "max number of llm_call events to scan", "1000")
     .action((options: UsageCommandOptions) => {
       const store = new SqliteStore(options.db);

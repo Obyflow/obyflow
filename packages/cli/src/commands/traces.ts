@@ -3,7 +3,7 @@ import chalk from "chalk";
 import { SqliteStore, rowToEvent } from "@obyflow/core";
 import { renderTable, type TableColumn } from "../render/table.js";
 import { renderDetailCards } from "../render/detail.js";
-import { parseSince } from "../render/time.js";
+import { parseSince, parseTimeWindowOption } from "../render/time.js";
 import { loadRedactionConfig } from "../render/redaction.js";
 import { runWatchLoop } from "../render/watch.js";
 import type { Event } from "@obyflow/core";
@@ -45,7 +45,7 @@ export function registerTracesCommand(program: Command): void {
     .description("List or inspect traces")
     .option("--db <path>", "path to the obyflow SQLite database", "obyflow.db")
     .option("--service <name>", "filter by service name")
-    .option("--since <window>", "time window, e.g. 15m, 2h, 1d")
+    .option("--since <window>", "time window, e.g. 15m, 2h, 1d", parseTimeWindowOption)
     .option("--limit <n>", "max number of results", "50")
     .option("--detail", "show full detail cards instead of a table")
     .option("--watch [seconds]", "poll and re-render every N seconds (default 2)")
