@@ -3,7 +3,7 @@ import { writeFileSync } from "node:fs";
 import chalk from "chalk";
 import { SqliteStore, rowToEvent } from "@obyflow/core";
 import type { Event, EventRow } from "@obyflow/core";
-import { parseSince } from "../render/time.js";
+import { parseSince, parseTimeWindowOption } from "../render/time.js";
 
 interface ExportCommandOptions {
   db: string;
@@ -98,8 +98,8 @@ export function registerExportCommand(program: Command): void {
     .option("--db <path>", "path to the obyflow SQLite database", "obyflow.db")
     .option("--service <name>", "filter by service name")
     .option("--type <type>", "filter by event type")
-    .option("--since <window>", "time window, e.g. 15m, 2h, 1d")
-    .option("--until <window>", "upper bound time window, e.g. 1h")
+    .option("--since <window>", "time window, e.g. 15m, 2h, 1d", parseTimeWindowOption)
+    .option("--until <window>", "upper bound time window, e.g. 1h", parseTimeWindowOption)
     .option("--limit <n>", "max number of events to export")
     .option("--format <format>", "json | csv | otlp", "json")
     .option("--out <file>", "write output to a file instead of stdout")
