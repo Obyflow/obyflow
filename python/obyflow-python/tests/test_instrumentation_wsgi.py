@@ -16,6 +16,11 @@ def _boom_app(environ, start_response):
     raise RuntimeError("boom")
 
 
+def _not_found_app(environ, start_response):
+    start_response("404 NOT FOUND", [("Content-Type", "text/plain")])
+    return [b"not found"]
+
+
 def _build_client(app, store: SqliteStore) -> Client:
     middleware = ObyflowWSGIMiddleware(app, service="checkout", store=store, deployment_id=None)
     return Client(middleware)
@@ -48,6 +53,21 @@ def test_wsgi_middleware_records_server_error_as_error_severity(tmp_path: Path):
         rows = store.get_by_service("checkout")
         assert len(rows) == 1
         assert rows[0].severity == "error"
+    finally:
+        store.close()
+
+
+def test_wsgi_middleware_records_client_error_as_warning_severity(tmp_path: Path):
+    store = SqliteStore(tmp_path / "obyflow.db")
+    try:
+        client = _build_client(_not_found_app, store)
+        response = client.get("/missing")
+        assert response.status_code == 404
+        response.get_data()
+
+        rows = store.get_by_service("checkout")
+        assert len(rows) == 1
+        assert rows[0].severity == "warn"
     finally:
         store.close()
 
