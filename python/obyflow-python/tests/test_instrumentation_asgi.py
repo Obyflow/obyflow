@@ -51,3 +51,17 @@ def test_asgi_middleware_records_server_error_as_error_severity(tmp_path: Path):
         assert rows[0].severity == "error"
     finally:
         store.close()
+
+
+def test_asgi_middleware_records_client_error_as_warning_severity(tmp_path: Path):
+    store = SqliteStore(tmp_path / "obyflow.db")
+    try:
+        client = TestClient(_build_app(store))
+        response = client.get("/missing")
+        assert response.status_code == 404
+
+        rows = store.get_by_service("checkout")
+        assert len(rows) == 1
+        assert rows[0].severity == "warn"
+    finally:
+        store.close()

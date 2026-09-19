@@ -67,6 +67,12 @@ class ObyflowASGIMiddleware:
             reset_trace_context(token)
             duration_ms = (time.monotonic() - started_at) * 1000
             status_code = status_code_holder["code"] or 0
+            if status_code >= 500:
+                severity = "error"
+            elif status_code >= 400:
+                severity = "warn"
+            else:
+                severity = "info"
             try:
                 event = validate_event(
                     {
@@ -90,7 +96,7 @@ class ObyflowASGIMiddleware:
                         "resource_attributes": resolve_resource_attributes(
                             self.resource_attributes
                         ),
-                        "severity": "error" if status_code >= 500 else "info",
+                        "severity": severity,
                     }
                 )
                 self.store.insert(event)
