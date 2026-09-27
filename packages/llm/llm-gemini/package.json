@@ -15,7 +15,7 @@
     "@obyflow/llm-core": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22.20.2"
+    "@types/node": "^22.20.4"
   },
   "repository": {
     "type": "git",
