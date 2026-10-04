@@ -14,7 +14,7 @@
     "@obyflow/adapter-framework": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^22.20.4"
+    "@types/node": "^22.20.5"
   },
   "license": "MIT",
   "files": [
