@@ -17,6 +17,7 @@ export function instrumentChromaCollection<T extends ChromaCollectionLike>(
       const { result, latencyMs } = await timeAsync<ChromaQueryResult>(() => original(params));
       const ids = result?.ids?.[0] ?? [];
       const distances = result?.distances?.[0] ?? [];
+
       emitVectorOpEvent(ctx, "chroma", {
         operation: "query",
         collection: collectionName ?? collection?.name ?? null,
@@ -24,10 +25,13 @@ export function instrumentChromaCollection<T extends ChromaCollectionLike>(
         filter: params?.where ?? null,
         result_count: Array.isArray(ids) ? ids.length : null,
         similarity_scores: Array.isArray(distances)
-          ? distances.filter((distance: any) => typeof distance === "number")
+          ? distances
+              .filter((distance: any) => typeof distance === "number")
+              .map((distance: number) => 1 / (1 + distance))
           : null,
         latency_ms: latencyMs,
       });
+
       return result;
     };
   }
@@ -37,12 +41,14 @@ export function instrumentChromaCollection<T extends ChromaCollectionLike>(
     collection.add = async (params: any) => {
       const { result, latencyMs } = await timeAsync(() => original(params));
       const ids = params?.ids ?? [];
+
       emitVectorOpEvent(ctx, "chroma", {
         operation: "upsert",
         collection: collectionName ?? collection?.name ?? null,
         result_count: Array.isArray(ids) ? ids.length : null,
         latency_ms: latencyMs,
       });
+
       return result;
     };
   }
@@ -51,11 +57,13 @@ export function instrumentChromaCollection<T extends ChromaCollectionLike>(
     const original = collection.delete.bind(collection);
     collection.delete = async (params: any) => {
       const { result, latencyMs } = await timeAsync(() => original(params));
+
       emitVectorOpEvent(ctx, "chroma", {
         operation: "delete",
         collection: collectionName ?? collection?.name ?? null,
         latency_ms: latencyMs,
       });
+
       return result;
     };
   }
