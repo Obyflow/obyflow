@@ -15,7 +15,7 @@
     "openai": "^7.23.0"
   },
   "devDependencies": {
-    "@types/node": "^22.20.4"
+    "@types/node": "^22.20.5"
   },
   "repository": {
     "type": "git",
