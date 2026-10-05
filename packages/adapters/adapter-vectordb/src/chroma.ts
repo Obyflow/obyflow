@@ -23,8 +23,13 @@ export function instrumentChromaCollection<T extends ChromaCollectionLike>(
         top_k: params?.nResults ?? null,
         filter: params?.where ?? null,
         result_count: Array.isArray(ids) ? ids.length : null,
+        // Map Chroma distances to a monotonic higher-is-better score for retrieval diagnosis.
+        // This is not true cosine similarity; with Chroma's default squared L2 distance,
+        // a score of 0.5 corresponds to a distance of 1.
         similarity_scores: Array.isArray(distances)
-          ? distances.filter((distance: any) => typeof distance === "number")
+          ? distances
+              .filter((distance: any) => typeof distance === "number")
+              .map((distance: number) => 1 / (1 + distance))
           : null,
         latency_ms: latencyMs,
       });
@@ -59,6 +64,5 @@ export function instrumentChromaCollection<T extends ChromaCollectionLike>(
       return result;
     };
   }
-
   return collection;
 }
