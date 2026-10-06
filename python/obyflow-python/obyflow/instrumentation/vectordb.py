@@ -293,7 +293,7 @@ def instrument_chroma_collection(
                 kwargs.get("n_results"),
                 kwargs.get("where"),
                 len(ids) if ids else None,
-                [d for d in distances if isinstance(d, (int, float))] or None,
+                [1 / (1 + d) for d in distances if isinstance(d, (int, float))] or None,
                 latency_ms,
             )
             return result

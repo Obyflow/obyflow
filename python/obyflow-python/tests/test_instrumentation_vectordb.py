@@ -4,6 +4,7 @@ from obyflow.client import SqliteStore
 from obyflow.context import TraceContext, reset_trace_context, set_trace_context
 from obyflow.instrumentation.vectordb import (
     VectorDbInstrumentationContext,
+    instrument_chroma_collection,
     instrument_openai_embeddings_client,
     instrument_pinecone_index,
 )
@@ -41,6 +42,34 @@ def test_instrument_pinecone_index_emits_vector_op(tmp_path):
     assert rows[0].attributes["db_provider"] == "pinecone"
     assert rows[0].attributes["result_count"] == 2
 
+
+class FakeChromaCollection:
+    name = "docs"
+
+    def query(self, **kwargs):
+        return {
+            "ids": [["doc-1", "doc-2", "doc-3"]],
+            "distances": [[0, 1, 3]],
+        }
+
+
+def test_instrument_chroma_collection_converts_distances_to_similarity_scores(tmp_path):
+    store = SqliteStore(tmp_path / "obyflow.db")
+    ctx = VectorDbInstrumentationContext(service="svc", store=store)
+    collection = instrument_chroma_collection(FakeChromaCollection(), ctx)
+
+    token = set_trace_context(TraceContext(trace_id="trace-chroma", request_id="req-chroma"))
+    try:
+        collection.query(n_results=3, where={"category": "test"})
+    finally:
+        reset_trace_context(token)
+
+    rows = store.get_by_trace_id("trace-chroma")
+    assert len(rows) == 1
+    assert rows[0].type == "vector_op"
+    assert rows[0].attributes["db_provider"] == "chroma"
+    assert rows[0].attributes["result_count"] == 3
+    assert rows[0].attributes["similarity_scores"] == [1.0, 0.5, 0.25]
 
 class FakeEmbeddingItem:
     def __init__(self, embedding):
