@@ -21,7 +21,7 @@
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
     "ora": "^9.4.1",
-    "figlet": "^1.8.0"
+    "figlet": "^1.12.0"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
