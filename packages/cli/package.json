@@ -18,7 +18,7 @@
     "@obyflow/llm-gemini": "workspace:*",
     "@obyflow/llm-ollama": "workspace:*",
     "@obyflow/llm-openai": "workspace:*",
-    "chalk": "^5.4.1",
+    "chalk": "^6.0.1",
     "commander": "^14.0.0",
     "ora": "^9.4.1",
     "figlet": "^1.12.0"
