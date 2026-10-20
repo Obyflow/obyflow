@@ -144,8 +144,8 @@ importers:
   packages/llm/llm-gemini:
     dependencies:
       '@google/genai':
-        specifier: ^2.25.0
-        version: 2.25.0
+        specifier: ^2.30.0
+        version: 2.30.0
       '@obyflow/core':
         specifier: workspace:*
         version: link:../../core
@@ -262,8 +262,8 @@ packages:
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@google/genai@2.25.0':
-    resolution: {integrity: sha512-g1hyidWxahzIg+hh+lLqPeBJl+Fu6051we2QKhFXdWgE4yGYf8PWOS8S3mMAdpe3eLx3KCWmhQR7GWyd3LYT1A==}
+  '@google/genai@2.30.0':
+    resolution: {integrity: sha512-Gkv1ix8iZey/V3WF4lHaRS8C71P533jenDT/lA+fdPTCfXYfmCVHvo+0H5jTgzonqsmROQG7QpzLJkpoP/x7bg==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       '@modelcontextprotocol/sdk': ^1.25.2
@@ -1369,7 +1369,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@google/genai@2.25.0':
+  '@google/genai@2.30.0':
     dependencies:
       google-auth-library: 10.9.1
       p-retry: 4.6.2
