@@ -57,6 +57,26 @@ def test_chain_event_requires_trace_id():
         )
 
 
+def test_parent_span_id_requires_trace_id():
+    with pytest.raises(EventValidationError):
+        validate_event(
+            _base_event(
+                trace_id=None,
+                parent_span_id="span_parent",
+            )
+        )
+
+
+def test_span_id_must_differ_from_parent_span_id():
+    with pytest.raises(EventValidationError):
+        validate_event(
+            _base_event(
+                span_id="span_1",
+                parent_span_id="span_1",
+            )
+        )
+
+
 def test_safe_validate_event_returns_error_without_raising():
     result = safe_validate_event(_base_event(service=None))
     assert result["ok"] is False
