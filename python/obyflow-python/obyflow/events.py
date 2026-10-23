@@ -158,6 +158,16 @@ def validate_event(raw: Union[Dict[str, Any], Event]) -> Event:
             [],
         )
 
+    if event.parent_span_id and not event.trace_id:
+        raise EventValidationError(
+            "Event with a parent_span_id must also carry a trace_id", []
+        )
+
+    if event.span_id and event.parent_span_id and event.span_id == event.parent_span_id:
+        raise EventValidationError(
+            "Event span_id and parent_span_id must not be equal", []
+        )
+
     return event
 
 
