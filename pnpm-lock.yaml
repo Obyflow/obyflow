@@ -100,8 +100,8 @@ importers:
         version: 9.4.1
     devDependencies:
       '@types/figlet':
-        specifier: ^1.7.0
-        version: 1.7.0
+        specifier: ^1.12.0
+        version: 1.12.0
       '@types/node':
         specifier: ^22.20.5
         version: 22.20.5
@@ -485,8 +485,9 @@ packages:
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
-  '@types/figlet@1.7.0':
-    resolution: {integrity: sha512-KwrT7p/8Eo3Op/HBSIwGXOsTZKYiM9NpWRBJ5sVjWP/SmlS+oxxRvJht/FNAtliJvja44N3ul1yATgohnVBV0Q==}
+  '@types/figlet@1.12.0':
+    resolution: {integrity: sha512-tPv140QqwGL4Jot2fzTxC6Oy8BVdHEZe4SJDlRuRkywfksv8kMCbTYvtuN9mJCm41HlgRhwb5rRaiH6FE5Hm9g==}
+    deprecated: This is a stub types definition. figlet provides its own type definitions, so you do not need this installed.
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -1522,7 +1523,9 @@ snapshots:
 
   '@types/estree@1.0.9': {}
 
-  '@types/figlet@1.7.0': {}
+  '@types/figlet@1.12.0':
+    dependencies:
+      figlet: 1.12.0
 
   '@types/json-schema@7.0.15': {}
 
