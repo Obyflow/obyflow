@@ -144,8 +144,8 @@ importers:
   packages/llm/llm-gemini:
     dependencies:
       '@google/genai':
-        specifier: ^2.30.0
-        version: 2.30.0
+        specifier: ^2.32.0
+        version: 2.32.0
       '@obyflow/core':
         specifier: workspace:*
         version: link:../../core
@@ -180,7 +180,7 @@ importers:
         version: link:../llm-core
       openai:
         specifier: ^7.45.1
-        version: 7.45.1(google-auth-library@10.9.1)(ws@8.22.0)(zod@4.6.7)
+        version: 7.45.1(google-auth-library@10.9.1)(ws@8.22.1)(zod@4.6.7)
     devDependencies:
       '@types/node':
         specifier: ^22.20.5
@@ -262,8 +262,8 @@ packages:
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@google/genai@2.30.0':
-    resolution: {integrity: sha512-Gkv1ix8iZey/V3WF4lHaRS8C71P533jenDT/lA+fdPTCfXYfmCVHvo+0H5jTgzonqsmROQG7QpzLJkpoP/x7bg==}
+  '@google/genai@2.32.0':
+    resolution: {integrity: sha512-60c79uXpR0a47bmGqDxbXEBuQUalNmwo5mx5kqb91jIW4FoqpsLSt86DeVhRhtH5+s/16Wqxt3sXzFQn2U1OHQ==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       '@modelcontextprotocol/sdk': ^1.25.2
@@ -1292,8 +1292,8 @@ packages:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
 
-  ws@8.22.0:
-    resolution: {integrity: sha512-Ydggc987+RO0AnWtZ/7Wq9FtNvcrL1b/RO0ud9mWjUPgDrsAAwQSF51sm2hm1XofbU/4jkpGEsLFsZZxU+1DOg==}
+  ws@8.22.1:
+    resolution: {integrity: sha512-oyL6OPYme/CmiFvNuGzeoxCJ4nOrZE2O1FwM9MWM1AsGri6nLXB2pg+lNA8aLeXMSav0J6eIVS1j6vUPzUtK9g==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -1373,12 +1373,12 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@google/genai@2.30.0':
+  '@google/genai@2.32.0':
     dependencies:
       google-auth-library: 10.9.1
       p-retry: 4.6.2
       protobufjs: 7.6.6
-      ws: 8.22.0
+      ws: 8.22.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -2030,10 +2030,10 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  openai@7.45.1(google-auth-library@10.9.1)(ws@8.22.0)(zod@4.6.7):
+  openai@7.45.1(google-auth-library@10.9.1)(ws@8.22.1)(zod@4.6.7):
     optionalDependencies:
       google-auth-library: 10.9.1
-      ws: 8.22.0
+      ws: 8.22.1
       zod: 4.6.7
 
   optionator@0.9.4:
@@ -2255,7 +2255,7 @@ snapshots:
 
   word-wrap@1.2.5: {}
 
-  ws@8.22.0: {}
+  ws@8.22.1: {}
 
   yocto-queue@0.1.0: {}
 
