@@ -20,7 +20,7 @@
     "@obyflow/llm-openai": "workspace:*",
     "chalk": "^6.0.1",
     "commander": "^14.0.0",
-    "ora": "^9.4.1",
+    "ora": "^10.0.0",
     "figlet": "^1.12.0"
   },
   "devDependencies": {
